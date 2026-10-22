@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  COMPLETED
+}
+
+enum ProviderKind {
+  DOCTOR
+  CLINIC
+}
+
+model Doctor {
+  id          String       @id @default(cuid())
+  name        String
+  slug        String       @unique
+  title       String
+  kind        ProviderKind @default(DOCTOR)
+  city        String
+  address     String
+  phone       String
+  email       String
+  description String       @db.Text
+  photoUrl    String?
+  rating      Decimal?     @db.Decimal(2, 1)
+  isFeatured  Boolean      @default(false)
+  isDemo      Boolean      @default(false)
+  services    Json         @default("[]")
+  createdAt   DateTime     @default(now())
+  leads       Lead[]
+
+  @@index([city, isFeatured])
+}
+
+model Lead {
+  id             String     @id @default(cuid())
+  patientName    String
+  patientPhone   String
+  patientEmail   String?
+  city           String
+  preferredDate  DateTime?   @db.Date
+  message        String?    @db.Text
+  doctorId       String?
+  doctor         Doctor?    @relation(fields: [doctorId], references: [id], onDelete: SetNull)
+  status         LeadStatus @default(NEW)
+  consentAt      DateTime
+  consentVersion String
+  createdAt      DateTime   @default(now())
+
+  @@index([status, createdAt])
+  @@index([doctorId])
+}
+
+model CityPage {
+  id              String @id @default(cuid())
+  cityName        String @unique
+  slug            String @unique
+  metaTitle       String
+  metaDescription String
+  contentIntro    String @db.Text
+}
+
+model PartnershipRequest {
+  id            String     @id @default(cuid())
+  clinicName    String
+  city          String
+  contactName   String
+  phone         String
+  email         String
+  status        LeadStatus @default(NEW)
+  consentAt     DateTime
+  createdAt     DateTime   @default(now())
+
+  @@index([status, createdAt])
+}
