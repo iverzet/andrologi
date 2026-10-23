@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { site } from "@/config/site";
 import type { CatalogDoctor } from "../../prisma/seed-data";
 
-export function pageMetadata(title: string, description: string, path: string, noindex = true): Metadata {
+export function pageMetadata(title: string, description: string, path: string, noindex = !site.indexable): Metadata {
   const url = new URL(path, site.url).href;
   return {
     title, description, alternates: { canonical: url },

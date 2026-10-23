@@ -42,6 +42,7 @@ model Doctor {
 
 model Lead {
   id             String     @id @default(cuid())
+  submissionKey  String?    @unique
   patientName    String
   patientPhone   String
   patientEmail   String?
@@ -54,6 +55,7 @@ model Lead {
   consentAt      DateTime
   consentVersion String
   createdAt      DateTime   @default(now())
+  notification   Notification?
 
   @@index([status, createdAt])
   @@index([doctorId])
@@ -70,6 +72,7 @@ model CityPage {
 
 model PartnershipRequest {
   id            String     @id @default(cuid())
+  submissionKey String?    @unique
   clinicName    String
   city          String
   contactName   String
@@ -78,6 +81,46 @@ model PartnershipRequest {
   status        LeadStatus @default(NEW)
   consentAt     DateTime
   createdAt     DateTime   @default(now())
+  notification  Notification?
+
+  @@index([status, createdAt])
+}
+
+model AdminSession {
+  tokenHash String   @id
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([expiresAt])
+}
+
+model RateLimit {
+  key       String   @id
+  count     Int      @default(1)
+  expiresAt DateTime
+
+  @@index([expiresAt])
+}
+
+enum NotificationStatus {
+  PENDING
+  PROCESSING
+  SENT
+  FAILED
+}
+
+model Notification {
+  id            String             @id @default(cuid())
+  leadId        String?            @unique
+  lead          Lead?              @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  partnershipId String?            @unique
+  partnership   PartnershipRequest? @relation(fields: [partnershipId], references: [id], onDelete: Cascade)
+  status        NotificationStatus @default(PENDING)
+  attempts      Int                @default(0)
+  lastError     String?
+  lastAttemptAt DateTime?
+  sentAt        DateTime?
+  createdAt     DateTime           @default(now())
 
   @@index([status, createdAt])
 }
