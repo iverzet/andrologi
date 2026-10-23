@@ -1,52 +1,73 @@
 # Proctologi.ro
 
-Portal medical în limba română, dezvoltat în repository-ul public `iverzet/medici`.
+Portal medical în limba română, în repository-ul public `iverzet/medici`.
 
-## Stadiu
+## Stadiu — etapa 2, pașii 1 și 2
 
-Pasul 1: fundația Next.js App Router, React, TypeScript, Tailwind CSS, componente UI în convenția shadcn/ui și Prisma pentru PostgreSQL. Pagina inițială explică stadiul proiectului și este exclusă de la indexare. Nu colectează date și nu oferă încă programări.
+Implementate: catalogul pe orașe, profiluri, homepage, FAQ, pagina B2B, filtre GET, metadata OpenGraph, JSON-LD pentru profiluri reale și interfața formularelor. Formularele sunt dezactivate explicit: nu colectează, nu salvează și nu trimit date. Server Actions, emailurile, administrarea și exportul CSV apar în pașii următori.
 
-Profilurile, paginile orașelor, formularele, autentificarea, exportul CSV, emailurile și seed-ul apar în etapele următoare. Schema de date este definită, dar nu există încă migrații aplicate sau o bază de date provisionată.
+Toate paginile sunt încă `noindex, nofollow`, până la activarea portalului cu date reale. Sitemap-ul și regulile finale robots apar în etapa de verificare finală.
 
-## Mediu
+## Mediu și comenzi
 
-Node.js 24 și npm. Instalează dependențele cu `npm ci`.
+Node.js 24 și npm. Instalare: `npm ci`. Copiază `.env.example` în `.env.local` și completează configurația pentru modul dorit.
 
-Copiază `.env.example` în `.env.local`, apoi configurează `DATABASE_URL` prin integrarea Neon din proiectul Vercel `medici`. `DIRECT_URL` poate indica o conexiune directă pentru migrații. `NEXT_PUBLIC_SITE_URL` este URL-ul public al aplicației, fără cale suplimentară.
+- `npm run lint`
+- `npm run type-check`
+- `npm run db:validate`
+- `npm run build`
+- `npm run start -- --port 3107` — preview al build-ului de producție.
+- `npm run dev` — dezvoltare, după verificarea configurației.
 
-Nu salva parole, URL-uri reale de conectare, exporturi sau date de pacienți în Git. `.env.local`, `.vercel`, fișierele generate Prisma și rezultatul build-ului sunt ignorate.
+## Catalog demonstrativ fără bază de date
 
-## Comenzi
+Setează explicit `DEMO_MODE=true` în `.env.local`. Pagina utilizează setul din `prisma/seed-data.ts`, fără conexiuni PostgreSQL. Acest mod nu este activat automat când baza de date lipsește sau eșuează. Setează `NEXT_PUBLIC_SITE_URL` la URL-ul preview-ului.
 
-- `npm run lint` — ESLint.
-- `npm run type-check` — generare client Prisma și tipuri Next.js, apoi TypeScript.
-- `npm run db:validate` — verificare schema Prisma.
-- `npm run db:generate` — generare client Prisma.
-- `npm run build` — generare Prisma și build Next.js.
-- `npm run start` — server pentru build-ul de producție.
-- `npm run dev` — server de dezvoltare, după configurarea mediului.
-- `npm run db:migrate` — aplicarea migrațiilor existente, după conectarea bazei de date. În această etapă nu există încă migrații.
+Setul conține București, Cluj-Napoca, Timișoara, Iași și Brașov, cu câte două profiluri fictive. Toate numele, adresele, telefoanele, ratingurile și tarifele sunt demonstrative. Adresele de email folosesc domeniul rezervat `example.invalid`. Nu există linkuri de apel sau hărți pentru profilurile fictive. Aceste profiluri nu sunt emise drept entități medicale reale în JSON-LD.
 
-Lint, generarea clientului și build-ul paginii inițiale nu necesită baza de date. `getDb()` verifică explicit `DATABASE_URL` când este apelat, fără a substitui date fictive. Prisma CLI încarcă aceleași fișiere de mediu ca Next.js prin `@next/env`.
+## PostgreSQL prin Vercel / Neon
 
-## Structură
+Proiect: `invitatii/medici`. Instalează integrarea Neon prin Vercel Marketplace, plan gratuit, regiune Frankfurt. Prima instalare necesită acceptarea termenilor furnizorului de către proprietar. Verifică proiectul selectat înainte de conectare și nu reutiliza o bază de date a altui proiect.
 
-- `src/config/site.ts` — identitatea portalului și specialitatea.
-- `src/app` — layout, pagina inițială și tema medicală.
-- `src/components/ui` — Button, Card, Input, Label; componente locale configurate prin `components.json`.
-- `src/lib/db.ts` — client Prisma exclusiv pentru server, cu reutilizarea conexiunilor.
-- `prisma/schema.prisma` — Doctor, Lead, CityPage și PartnershipRequest.
+După provisionare, importă `DATABASE_URL` din mediul Vercel într-un fișier local ignorat. `DIRECT_URL` este opțional și poate folosi conexiunea Neon fără pooling pentru migrații. Nu afișa sau publica valorile reale. Nu publica `.env.local`, exporturi sau date ale pacienților.
 
-Schema separă cererile B2B de programările pacienților. Profilurile pot fi marcate demonstrative; ratingul este opțional. Consimțământul programărilor are dată și versiune. Implementarea formularelor și controlul accesului fac parte din etapele următoare.
+Într-o bază dedicată demonstrației:
 
-## Vercel
+1. Setează `DEMO_MODE=false`, configurează `DATABASE_URL` și verifică legătura Vercel.
+2. Rulează `npm run db:migrate` pentru migrația inițială versionată.
+3. Setează temporar `ALLOW_DEMO_SEED=true`.
+4. Rulează `npm run db:seed` de două ori; fiecare rulare trebuie să confirme cinci orașe și zece profiluri demonstrative, fără duplicate.
+5. Revino la `ALLOW_DEMO_SEED=false`.
 
-Proiectul remote se numește `medici`. Setează framework-ul Next.js, Node.js 24 și comanda de build `npm run build`. Configurează baza de date prin Vercel Marketplace și variabile distincte pentru dezvoltare, preview și producție. Verifică legătura GitHub înaintea primului deployment. Nu executa migrații sau seed automat la fiecare build.
+Seed-ul folosește o tranzacție și `upsert` pe slug-uri. ID-urile sunt stabile. Refuză suprascrierea unui oraș cu alt ID sau a unui profil real. Nu șterge înregistrări și nu atinge programări. Nu include seed sau migrații în comanda de build.
 
-Domeniul proctologi.ro nu este încă conectat. Elimină `robots: { index: false, follow: false }` numai odată cu publicarea conținutului real și implementarea regulilor SEO pentru rutele private și demonstrative.
+Prisma CLI încarcă mediul prin `@next/env`. Fără `DEMO_MODE=true`, catalogul citește PostgreSQL și o eroare este prezentată prin pagina de eroare, nu înlocuită tacit cu date fictive. Migrațiile și seed-ul necesită o bază de date reală; build-ul poate fi executat fără acces la aceasta, fiindcă rutele catalogului sunt randate la cerere.
+
+## Rute
+
+- `/` — căutare, orașe, promovări, FAQ și formular în previzualizare.
+- `/proctologi-bucuresti`, `/proctologi-cluj`, `/proctologi-timisoara`, `/proctologi-iasi`, `/proctologi-brasov`.
+- `/medici/demo-medic-bucuresti` — exemplu de profil; slug-urile vin din catalog.
+- `/pentru-clinici` — prezentarea parteneriatului și formular în previzualizare.
+
+Filtrele folosesc `?tip=DOCTOR` / `?tip=CLINIC` și `serviciu`. Un serviciu fără rezultate afișează o stare goală și resetare. Slug-urile inexistente afișează 404.
+
+## Arhitectură
+
+`src/lib/catalog.ts` este exclusiv pentru server și reutilizează citirile în aceeași randare. Componentele interactive primesc doar date serializabile. `src/lib/seo.ts` construiește metadate canonice și escapează JSON-LD. Schema pentru medic este `Physician`, iar pentru clinică `MedicalBusiness`; ratingurile demonstrative nu sunt publicate ca recenzii structurate.
+
+Identitatea portalului este centralizată în `src/config/site.ts`. Formularele folosesc React Hook Form și Zod, fără endpoint de trimitere în această etapă. La activare sunt necesare validare server, consimțământ, politici publicate și controlul accesului la solicitări.
 
 ## Observații despre dependențe
 
-La inițializare, `npm audit --omit=dev` raportează zero vulnerabilități. Auditul complet raportează cinci alerte ridicate în lanțul de dezvoltare `eslint-config-next → fast-glob → micromatch → braces` (GHSA-vfj7-8cjw-p6xm). Registry-ul nu oferă încă o versiune `braces` corectată. Nu aplica automat retrogradarea majoră sugerată de `npm audit fix --force`.
+Auditul inițial al dependențelor de producție raportează zero vulnerabilități. Auditul complet raportează cinci alerte ridicate în lanțul `eslint-config-next → fast-glob → micromatch → braces` (GHSA-vfj7-8cjw-p6xm). Nu aplica automat retrogradarea majoră sugerată de `npm audit fix --force`.
 
-ESLint 9 este păstrat pentru compatibilitatea declarată de `eslint-plugin-react`; npm îl marchează ca nesuportat. Reevaluatează actualizarea coordonată a configurației Next.js și pluginului React când acestea declară suport pentru ESLint 10.
+ESLint 9 este păstrat pentru compatibilitatea declarată de `eslint-plugin-react`. Adaptorul formularelor este `@hookform/resolvers` 5, compatibil cu Zod 4; versiunea 6 a produs un conflict de dependențe opționale la instalare, astfel că nu s-a folosit `--force` sau `--legacy-peer-deps`.
+
+## Verificare efectuată — 23 octombrie 2026
+
+Integrarea Neon `medici-db` a fost creată în Frankfurt și conectată la proiectul Vercel `medici`. Migrația inițială a fost aplicată. Două rulări consecutive ale seed-ului au confirmat cinci orașe și zece profiluri, fără duplicate. Tabelele Lead și PartnershipRequest sunt goale.
+
+Preview-ul local folosește acum PostgreSQL (`DEMO_MODE=false`). Rutele principale și filtrele au fost verificate cu date din baza de date; rutele inexistente răspund cu 404. Verificările de lint, TypeScript, Prisma și build au trecut, împreună cu testele datelor de seed, filtrelor, validării și escapării JSON-LD. Interfața a fost verificată la lățimi mobile și desktop, fără depășire orizontală în paginile testate.
+
+Neon furnizează `DATABASE_URL_UNPOOLED`; configurația Prisma și seed-ul o folosesc automat pentru conexiunea directă, dacă `DIRECT_URL` nu este definită. Driverul PostgreSQL poate emite un avertisment despre viitoarea schimbare a semanticii `sslmode=require`; versiunea instalată verifică în prezent certificatul ca `verify-full`.

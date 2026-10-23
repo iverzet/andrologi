@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { site } from "@/config/site";
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
 import "./globals.css";
 
 const geist = Geist({ variable: "--font-geist-sans", subsets: ["latin", "latin-ext"], display: "swap" });
@@ -17,7 +19,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="ro" className={geist.variable}>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <a href="#continut" className="sr-only z-50 rounded bg-white p-3 text-primary focus:not-sr-only focus:fixed focus:left-4 focus:top-4">Sari la conținut</a>
+        <SiteHeader />
         {children}
+        <SiteFooter />
       </body>
     </html>
   );

@@ -1,60 +1,45 @@
-import { ArrowDown, ArrowUpRight, HeartPulse, MapPin, ShieldCheck, Stethoscope } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Card, CardContent } from "@/components/ui/card";
-import { site } from "@/config/site";
+import { ArrowUpRight, MapPin, ShieldCheck, HeartHandshake, Search, Quote } from "lucide-react";
+import { getCities, getDoctors, demoMode } from "@/lib/catalog";
+import { pageMetadata } from "@/lib/seo";
+import { CitySelector } from "@/components/city-selector";
+import { DoctorCard } from "@/components/doctor-card";
+import { LeadForm } from "@/components/lead-form";
+import { FAQ } from "@/components/faq";
+import { MobileContactBar } from "@/components/mobile-contact-bar";
 
-const principles = [
-  { number: "01", icon: MapPin, title: "Mai aproape de tine", text: "Un punct de pornire pentru a găsi un specialist în orașul tău." },
-  { number: "02", icon: ShieldCheck, title: "Discreție, la fiecare pas", text: "Un subiect personal merită o abordare atentă și respectuoasă." },
-  { number: "03", icon: Stethoscope, title: "Informații pe înțelesul tău", text: "Un spațiu clar, dedicat proctologiei și alegerii unui specialist." },
-];
+export const dynamic = "force-dynamic";
+export const metadata = pageMetadata("Găsește un proctolog în orașul tău", "Explorează medici și clinici de proctologie. Informații despre servicii și tarife într-un singur loc.", "/");
 
-export default function Home() {
-  return (
-    <div className="mx-auto max-w-7xl px-5 sm:px-10">
-      <header className="flex min-h-24 items-center justify-between gap-4 border-b border-border">
-        <Link href="/" className="flex items-center gap-2.5 text-xl font-semibold tracking-tight" aria-label={`${site.name} — pagina principală`}>
-          <span className="flex size-10 items-center justify-center rounded-xl bg-primary text-white"><HeartPulse aria-hidden="true" className="size-6" /></span>
-          <span>proctologi<span className="text-primary">.ro</span></span>
-        </Link>
-        <a href="#despre" className="flex items-center gap-2 text-sm font-medium hover:text-primary">Despre proiect <ArrowUpRight aria-hidden="true" className="size-4" /></a>
-      </header>
-      <main id="continut">
-        <section className="grid gap-12 py-16 sm:py-24 lg:grid-cols-[1.25fr_0.75fr] lg:items-center lg:gap-20" aria-labelledby="titlu">
-          <div>
-            <p className="mb-7 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary"><span className="size-2 rounded-full bg-primary" /> Un nou spațiu pentru sănătatea ta</p>
-            <h1 id="titlu" className="max-w-3xl text-5xl leading-[1.08] font-semibold tracking-tight sm:text-6xl lg:text-7xl">Primul pas către<br /><span className="text-primary">mai multă liniște.</span></h1>
-            <p className="mt-7 max-w-xl text-lg leading-8 text-muted-foreground">Pregătim un loc în care să găsești mai ușor informații despre proctologie și specialiști din orașul tău. Cu claritate, grijă și discreție.</p>
-            <Button asChild size="lg" className="mt-9"><a href="#despre">Descoperă proiectul <ArrowDown aria-hidden="true" /></a></Button>
-          </div>
-          <aside className="relative rounded-3xl border border-sky-100 bg-sky-50 p-8 sm:p-10" aria-label="Stadiul platformei">
-            <div className="mb-10 flex size-16 items-center justify-center rounded-2xl bg-white text-primary shadow-sm"><HeartPulse aria-hidden="true" className="size-9" strokeWidth={1.5} /></div>
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">Proctologi.ro</p>
-            <h2 className="mt-3 text-3xl leading-tight font-semibold tracking-tight">O conversație delicată.<br />Un început simplu.</h2>
-            <div className="mt-10 border-t border-sky-200 pt-6">
-              <span className="rounded-full border border-sky-200 bg-white px-3 py-1 text-xs font-medium">În pregătire</span>
-              <p className="mt-4 text-sm leading-6 text-muted-foreground">Platforma este în curs de dezvoltare. Programările și listările de medici nu sunt încă disponibile.</p>
-            </div>
-          </aside>
-        </section>
-        <section id="despre" className="scroll-mt-8 border-t border-border py-12 sm:py-16" aria-labelledby="despre-titlu">
-          <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-            <h2 id="despre-titlu" className="text-2xl font-semibold tracking-tight sm:text-3xl">Construit în jurul nevoilor tale.</h2>
-            <p className="text-sm text-muted-foreground">Claritate. Respect. Accesibilitate.</p>
-          </div>
-          <div className="grid gap-4 md:grid-cols-3">{principles.map(({ number, icon: Icon, title, text }) => (
-            <Card key={number} className="shadow-none"><CardContent className="p-6">
-              <div className="mb-8 flex items-center justify-between"><Icon aria-hidden="true" className="size-6 text-primary" strokeWidth={1.5} /><span className="text-xs text-muted-foreground">{number}</span></div>
-              <h3 className="text-lg font-semibold">{title}</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">{text}</p>
-            </CardContent></Card>
-          ))}</div>
-        </section>
-      </main>
-      <footer className="flex flex-col justify-between gap-3 border-t border-border py-7 text-xs leading-5 text-muted-foreground sm:flex-row">
-        <p>© {new Date().getFullYear()} {site.name}</p>
-        <p>Informațiile platformei nu înlocuiesc consultația medicală.</p>
-      </footer>
-    </div>
-  );
+export default async function Home() {
+  const [cities, doctors] = await Promise.all([getCities(), getDoctors()]);
+  const featured = doctors.filter((doctor) => doctor.isFeatured);
+  return <main id="continut">
+    <section className="bg-slate-950 text-white"><div className="site-container grid gap-12 py-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20 lg:py-22">
+      <div><p className="mb-6 text-xs font-semibold uppercase tracking-[0.18em] text-sky-300">Sănătatea ta merită atenție</p>
+        <h1 className="text-4xl font-semibold leading-[1.12] tracking-tight sm:text-5xl lg:text-6xl">Un specialist aproape.<br /><span className="text-sky-300">Un pas spre liniște.</span></h1>
+        <p className="mt-6 max-w-xl text-lg leading-8 text-slate-300">Găsește medici și clinici de proctologie în orașul tău. Compară opțiunile, înțelege serviciile și alege informat.</p>
+        <div className="mt-9"><CitySelector cities={cities} /></div>
+        <p className="mt-4 text-xs leading-5 text-slate-400">{cities.length} orașe · {doctors.length} profiluri{demoMode || doctors.some((doctor) => doctor.isDemo) ? " · Catalog cu date demonstrative" : ""}</p>
+      </div>
+      <div className="relative flex flex-col justify-center rounded-3xl border border-white/10 bg-white/5 p-8 sm:p-10">
+        <span className="mb-8 flex size-16 items-center justify-center rounded-2xl bg-sky-300/10 text-sky-200"><HeartHandshake aria-hidden="true" className="size-9" strokeWidth={1.5} /></span>
+        <p className="text-2xl font-medium leading-9 tracking-tight">Unele conversații sunt delicate.<br />Primul pas poate fi simplu.</p>
+        <div className="mt-8 space-y-5 border-t border-white/15 pt-7">{[[ShieldCheck,"Respect pentru intimitatea ta"],[MapPin,"Caută în orașul tău"],[Search,"Informații clare, într-un singur loc"]].map(([Icon,text],index) => { const Symbol = Icon as typeof Search; return <p key={index} className="flex items-center gap-3 text-sm text-slate-200"><Symbol className="size-5 text-sky-300" aria-hidden="true" />{text as string}</p>; })}</div>
+      </div>
+    </div></section>
+    <div className="site-container">
+      <section id="orase" className="section-space scroll-mt-8"><p className="eyebrow">Aproape de tine</p><div className="section-heading"><h2 className="section-title">Începe cu orașul tău</h2><p className="text-sm text-slate-500">Explorează serviciile disponibile local</p></div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">{cities.map((city, index) => <Link key={city.slug} href={"/" + city.slug} className="group rounded-2xl border bg-white p-5 hover:border-sky-500"><div className="mb-8 flex justify-between"><span className="text-xs font-medium text-slate-400">0{index + 1}</span><ArrowUpRight className="size-5 text-sky-700 transition-transform group-hover:-translate-y-1" aria-hidden="true" /></div><h3 className="font-semibold">{city.cityName}</h3><p className="mt-2 text-xs text-slate-500">{doctors.filter((doctor) => doctor.city === city.cityName).length} profiluri în catalog</p></Link>)}</div>
+      </section>
+      <section className="pb-16"><p className="eyebrow">Explorează catalogul</p><div className="section-heading"><h2 className="section-title">Medici și clinici recomandate</h2><p className="text-xs text-slate-500">Pozițiile promovate sunt etichetate distinct</p></div>
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">{featured.map((doctor) => <DoctorCard key={doctor.id} doctor={doctor} />)}</div>
+        {featured.length === 0 && <p className="rounded-xl border p-6">Nu există încă profiluri promovate. Explorează orașele pentru catalogul complet.</p>}
+      </section>
+      <section className="grid gap-10 rounded-3xl bg-sky-50 p-6 sm:p-10 lg:grid-cols-2 lg:items-center"><div><p className="eyebrow">În ritmul tău</p><h2 className="section-title">O cerere simplă.<br />O discuție personală.</h2><p className="mt-6 max-w-md leading-8 text-slate-600">Pregătim un flux de programare prin care să poți alege orașul și specialistul. Vei primi o confirmare de la clinică înainte de stabilirea consultației.</p><ol className="mt-8 space-y-5">{["Alegi orașul și profilul potrivit","Trimiți solicitarea după activarea serviciului","Confirmi detaliile direct cu partenerul"].map((step,index) => <li key={step} className="flex items-center gap-3 text-sm"><span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-white font-semibold text-sky-800">{index+1}</span>{step}</li>)}</ol></div><LeadForm cities={cities.map((city) => city.cityName)} /></section>
+      <FAQ />
+      <section className="pb-16"><p className="eyebrow">Experiența pe care o pregătim</p><div className="section-heading"><h2 className="section-title">Mai ușor de ales. Mai simplu de înțeles.</h2></div><p className="mb-6 text-sm text-amber-900">Exemple editoriale demonstrative — nu sunt testimoniale ale unor pacienți reali.</p><div className="grid gap-5 md:grid-cols-3">{["Aș vrea să găsesc toate opțiunile din orașul meu într-un singur loc.","M-ar ajuta să înțeleg serviciile și tarifele înainte să aleg o clinică.","Pentru mine contează o prezentare clară și o abordare discretă."].map((text,index) => <figure key={text} className="rounded-2xl border bg-white p-6"><Quote className="mb-5 size-6 text-sky-700" aria-hidden="true" /><blockquote className="leading-7">{text}</blockquote><figcaption className="mt-6 text-xs text-slate-500">Scenariu ilustrativ {index+1} · fără atribuire unui pacient</figcaption></figure>)}</div></section>
+      <section className="flex flex-wrap items-center justify-between gap-6 rounded-2xl bg-slate-900 p-8 text-white"><div><h2 className="text-2xl font-semibold">Reprezinți o clinică?</h2><p className="mt-2 text-sm text-slate-300">Descoperă modelul de parteneriat Proctologi.ro.</p></div><Link href="/pentru-clinici" className="rounded-lg bg-white px-5 py-3 text-sm font-semibold text-slate-900">Devino partener <ArrowUpRight className="ml-2 inline size-4" aria-hidden="true" /></Link></section>
+    </div><MobileContactBar />
+  </main>;
 }
