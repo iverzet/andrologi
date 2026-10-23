@@ -29,7 +29,7 @@ export default async function CityPage({ params, searchParams }: Props) {
   return <main id="continut">
     <section className="border-b bg-sky-50"><div className="site-container py-12 sm:py-16">
       <nav aria-label="Fir de navigare" className="mb-6 text-sm text-slate-600"><Link href="/">Acasă</Link><span aria-hidden="true"> / </span><span>{city.cityName}</span></nav>
-      <p className="eyebrow">Specialiști în orașul tău</p><h1 className="mt-4 max-w-3xl text-3xl font-semibold leading-tight tracking-tight sm:text-5xl">Proctologi și clinici de proctologie în {city.cityName}</h1>
+      <p className="eyebrow">Specialiști în orașul tău</p><h1 className="mt-4 max-w-3xl text-3xl font-semibold leading-tight tracking-tight sm:text-5xl">Andrologi și clinici de andrologie în {city.cityName}</h1>
       <p className="mt-6 max-w-3xl leading-8 text-slate-600">{city.contentIntro}</p>
       {(demoMode || cityDoctors.some((doctor) => doctor.isDemo)) && <p className="mt-6 inline-block rounded-lg bg-amber-100 px-4 py-2 text-sm text-amber-900">Catalog demonstrativ. Profilurile Demo, adresele și tarifele sunt fictive.</p>}
     </div></section>

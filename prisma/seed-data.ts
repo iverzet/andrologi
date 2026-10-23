@@ -12,10 +12,10 @@ const cities = [
 ] as const;
 
 export const seedCities: CatalogCity[] = cities.map(([cityName, slug]) => ({
-  id: `demo-city-${slug}`, cityName, slug: `proctologi-${slug}`,
-  metaTitle: `Proctologi și clinici de proctologie în ${cityName}`,
-  metaDescription: `Descoperă specialiști și clinici de proctologie în ${cityName}. Compară serviciile, tarifele orientative și informațiile despre consultații.`,
-  contentIntro: `Alegerea unui specialist începe cu informații clare. Explorează opțiunile de proctologie din ${cityName}, serviciile disponibile și tarifele orientative, într-un singur loc.`,
+  id: `demo-city-${slug}`, cityName, slug: `andrologi-${slug}`,
+  metaTitle: `Andrologi și clinici de andrologie în ${cityName}`,
+  metaDescription: `Descoperă specialiști și clinici de andrologie în ${cityName}. Compară serviciile, tarifele orientative și informațiile despre consultații.`,
+  contentIntro: `Alegerea unui specialist începe cu informații clare. Explorează opțiunile de andrologie din ${cityName}, serviciile disponibile și tarifele orientative, într-un singur loc.`,
 }));
 
 export const seedDoctors: CatalogDoctor[] = seedCities.flatMap((city, index) => {
@@ -24,7 +24,7 @@ export const seedDoctors: CatalogDoctor[] = seedCities.flatMap((city, index) => 
     id: `demo-provider-${cityKey}-${position + 1}`,
     slug: `demo-${position === 0 ? "medic" : "clinica"}-${cityKey}`,
     name: position === 0 ? `Dr. Alex Exemplu — ${city.cityName}` : `Clinica Exemplu — ${city.cityName}`,
-    title: position === 0 ? "Medic specialist chirurgie generală · profil demonstrativ" : "Centru de proctologie · profil demonstrativ",
+    title: position === 0 ? "Medic specialist chirurgie generală · profil demonstrativ" : "Centru de andrologie · profil demonstrativ",
     kind: position === 0 ? "DOCTOR" as const : "CLINIC" as const,
     city: city.cityName,
     address: `Strada Exemplului nr. ${index + position + 1}, ${city.cityName} (adresă fictivă)`,
