@@ -1,6 +1,6 @@
 export const site = {
   name: "Proctologi.ro",
-  email: "contact@protologi.ro",
+  email: "contact@proctologi.ro",
   indexable: process.env.SITE_INDEXABLE === "true",
   specialty: "proctologie",
   locale: "ro_RO",
