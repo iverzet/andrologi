@@ -8,11 +8,22 @@ export const demoMode = process.env.DEMO_MODE === "true";
 const servicesSchema = z.array(z.object({ name: z.string(), price: z.number().nonnegative() }));
 export const getCities = cache(async (): Promise<CatalogCity[]> => {
   if (demoMode) return seedCities;
-  return getDb().cityPage.findMany({ orderBy: { cityName: "asc" } });
+  try {
+    return await getDb().cityPage.findMany({ orderBy: { cityName: "asc" } });
+  } catch (error) {
+    console.warn("[catalog] Database unavailable; serving demo cities", error);
+    return seedCities;
+  }
 });
 export const getDoctors = cache(async (): Promise<CatalogDoctor[]> => {
   if (demoMode) return seedDoctors;
-  const doctors = await getDb().doctor.findMany({ orderBy: [{ isFeatured: "desc" }, { name: "asc" }] });
+  let doctors;
+  try {
+    doctors = await getDb().doctor.findMany({ orderBy: [{ isFeatured: "desc" }, { name: "asc" }] });
+  } catch (error) {
+    console.warn("[catalog] Database unavailable; serving demo doctors", error);
+    return seedDoctors;
+  }
   return doctors.flatMap((doctor) => {
     const services = servicesSchema.safeParse(doctor.services);
     if (!services.success) {
