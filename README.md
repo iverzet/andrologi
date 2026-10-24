@@ -1,6 +1,6 @@
-# Proctologi.ro
+# Andrologi.ro
 
-Portal Next.js / App Router în repository-ul public `iverzet/medici`, găzduit în Vercel, cu PostgreSQL Neon prin Vercel Marketplace.
+Portal Next.js / App Router în repository-ul public `iverzet/andrologi`, găzduit în Vercel, cu PostgreSQL Neon prin Vercel Marketplace.
 
 ## Funcționalități
 
@@ -49,3 +49,4 @@ Identitatea publică este centralizată în `src/config/site.ts`. Nu publica dat
 ## Dependențe
 
 Nu s-au adăugat biblioteci pentru administrare, email sau CSV. ESLint 9 și `@hookform/resolvers` 5 sunt păstrate pentru compatibilitatea proiectului. Auditul inițial de producție a avut zero vulnerabilități; auditul complet a indicat cinci alerte în lanțul dev `eslint-config-next → fast-glob → micromatch → braces`. Nu aplica `npm audit fix --force` fără verificarea schimbărilor majore.
+
