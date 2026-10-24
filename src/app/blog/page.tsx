@@ -3,7 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { blogArticles } from "@/lib/blog";
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata = { ...pageMetadata("Blog medical despre andrologie", "Ghiduri medicale clare despre simptome, prevenție și prima consultație andrologică.", "/blog");), robots: { index: false, follow: false } };
+export const metadata = { ...pageMetadata("Blog medical despre andrologie", "Ghiduri medicale clare despre simptome, prevenție și prima consultație andrologică.", "/blog"), robots: { index: false, follow: false } };
 
 export default function BlogPage() {
   return <main id="continut"><div className="site-container section-space">
