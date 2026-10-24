@@ -24,7 +24,7 @@ export const seedDoctors: CatalogDoctor[] = seedCities.flatMap((city, index) => 
     id: `demo-provider-${cityKey}-${position + 1}`,
     slug: `demo-${position === 0 ? "medic" : "clinica"}-${cityKey}`,
     name: position === 0 ? `Dr. Alex Exemplu — ${city.cityName}` : `Clinica Exemplu — ${city.cityName}`,
-    title: position === 0 ? "Medic specialist chirurgie generală · profil demonstrativ" : "Centru de andrologie · profil demonstrativ",
+    title: position === 0 ? "Medic specialist urologie și andrologie · profil demonstrativ" : "Centru de andrologie · profil demonstrativ",
     kind: position === 0 ? "DOCTOR" as const : "CLINIC" as const,
     city: city.cityName,
     address: `Strada Exemplului nr. ${index + position + 1}, ${city.cityName} (adresă fictivă)`,
@@ -35,7 +35,7 @@ export const seedDoctors: CatalogDoctor[] = seedCities.flatMap((city, index) => 
     services: [
       { name: "Consultație inițială", price: 300 + index * 25 + position * 50 },
       { name: "Consultație de control", price: 200 + index * 20 },
-      { name: "Anoscopie — tarif demonstrativ", price: 250 + position * 50 },
+      { name: "Evaluare andrologică — tarif demonstrativ", price: 250 + position * 50 },
     ],
   }));
 });
