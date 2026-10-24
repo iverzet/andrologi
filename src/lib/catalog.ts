@@ -2,17 +2,31 @@ import "server-only";
 import { cache } from "react";
 import { z } from "zod";
 import { getDb } from "@/lib/db";
+import { site } from "@/config/site";
+import { municipalities, municipalitySlug } from "@/lib/municipalities";
 import { seedCities, seedDoctors, type CatalogCity, type CatalogDoctor } from "../../prisma/seed-data";
 
 export const demoMode = process.env.DEMO_MODE === "true";
 const servicesSchema = z.array(z.object({ name: z.string(), price: z.number().nonnegative() }));
+const municipalityCities: CatalogCity[] = municipalities.map((cityName) => ({
+  id: `municipality-${cityName}`,
+  cityName,
+  slug: municipalitySlug(cityName, "andrologi"),
+  metaTitle: `${site.name} în ${cityName}`,
+  metaDescription: `Găsește informații și opțiuni de programare pentru ${site.specialty} în ${cityName}.`,
+  contentIntro: `Explorează opțiunile disponibile pentru ${site.specialty} în ${cityName} și cere o programare confidențială.`,
+}));
+function withMunicipalities(cities: CatalogCity[]) {
+  const known = new Set(cities.map((city) => city.slug));
+  return [...cities, ...municipalityCities.filter((city) => !known.has(city.slug))];
+}
 export const getCities = cache(async (): Promise<CatalogCity[]> => {
-  if (demoMode) return seedCities;
+  if (demoMode) return withMunicipalities(seedCities);
   try {
-    return await getDb().cityPage.findMany({ orderBy: { cityName: "asc" } });
+    return withMunicipalities(await getDb().cityPage.findMany({ orderBy: { cityName: "asc" } }));
   } catch (error) {
     console.warn("[catalog] Database unavailable; serving demo cities", error);
-    return seedCities;
+    return withMunicipalities(seedCities);
   }
 });
 export const getDoctors = cache(async (): Promise<CatalogDoctor[]> => {
