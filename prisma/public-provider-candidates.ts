@@ -4,6 +4,7 @@ export type PublicProviderCandidate = {
   kind: "CLINIC" | "DOCTOR";
   description: string;
   sourceUrl: string;
+  photoUrl?: string;
   publish: boolean;
   location: { city: string; address: string; phone?: string; email?: string };
   services: string[];
@@ -27,6 +28,7 @@ export const publicProviderCandidates: PublicProviderCandidate[] = [
     kind: "DOCTOR",
     description: "Medic prezentat de CMIB în echipa de andrologie, cu activitate în urologie.",
     sourceUrl: "https://www.cmib.ro/specialitati/andrologie",
+    photoUrl: "https://cdn.prod.website-files.com/68a2e3cb7fc73ade85923e21/69ca5a38c699af11026e0600_Dr.%20Silviu-Andrei.png",
     publish: true,
     location: { city: "București", address: "Bulevardul Dacia nr. 103, Parter, Ap. 1, Sector 2, București", phone: "+40744649244" },
     services: ["Andrologie", "Consultație urologie"],
@@ -57,6 +59,7 @@ export const publicProviderCandidates: PublicProviderCandidate[] = [
     kind: "DOCTOR",
     description: "Medic primar urologie listat cu competență în andrologie și consultații în Iași de către rețeaua medicală.",
     sourceUrl: "https://www.reginamaria.ro/medici/dr-danii-sergiu",
+    photoUrl: "https://www.reginamaria.ro/sites/default/files/medic/danii_sergiu.png",
     publish: true,
     location: { city: "Iași", address: "Campus Medical Iași, Strada Grigore Ureche 3, Iași", phone: "+40219268" },
     services: ["Consultație andrologie", "Control andrologie", "Consultație urologie"],
