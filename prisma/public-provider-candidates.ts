@@ -118,4 +118,15 @@ export const publicProviderCandidates: PublicProviderCandidate[] = [
     location: { city: "Brașov", address: "Campus Medical Brașov, Bulevardul Iuliu Maniu 49, Brașov", phone: "+40219268" },
     services: ["Consultație urologie", "Evaluare infertilitate masculină", "Ecografie scrotală"],
   },
+  {
+    name: "Dr. Marcel Mustea",
+    slug: "dr-marcel-mustea-andrologie-cluj-napoca",
+    kind: "DOCTOR",
+    description: "Medic primar urologie, cu competențe în infertilitate și andrologie, listat de Regina Maria pentru consultații în Cluj-Napoca.",
+    sourceUrl: "https://www.reginamaria.ro/medici/dr-mustea-marcel",
+    photoUrl: "https://www.reginamaria.ro/sites/default/files/styles/large/public/medic/marcel_mustea3.png.webp?itok=iHj3x6Dp",
+    publish: true,
+    location: { city: "Cluj-Napoca", address: "Spital Cluj, Strada Dorobanților 29, Cluj-Napoca", phone: "+40219268" },
+    services: ["Consultație andrologie", "Evaluare infertilitate masculină", "Ecografie scrotală"],
+  },
 ];
