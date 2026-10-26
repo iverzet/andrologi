@@ -263,4 +263,14 @@ export const publicProviderCandidates: PublicProviderCandidate[] = [
     location: { city: "Slobozia", address: "Clinica AryMed, Strada Mihai Eminescu 1, Slobozia", phone: "+40215552917", email: "office@arymed.ro" },
     services: ["Consultație andrologie", "Evaluare infertilitate masculină", "Ecografie testiculară"],
   },
+  {
+    name: "Dr. Dorin Sîngeorzan",
+    slug: "dr-dorin-singeorzan-andrologie-miercurea-ciuc",
+    kind: "DOCTOR",
+    description: "Medic primar urologie, cu andrologia listată între specializările publice, pentru consultații în Miercurea Ciuc.",
+    sourceUrl: "https://agendamed.ro/p/urologie/miercurea-ciuc/singeorzan-dorin_3895.html",
+    publish: true,
+    location: { city: "Miercurea Ciuc", address: "CMI Dr. Sîngeorzan Dorin, Piața Majláth Gusztáv Károly 2-4, Miercurea Ciuc", phone: "+40752202702" },
+    services: ["Consultație andrologie", "Consultație urologie", "Ecografie aparat urinar"],
+  },
 ];
