@@ -232,4 +232,15 @@ export const publicProviderCandidates: PublicProviderCandidate[] = [
     location: { city: "Suceava", address: "Clinica Hereditas, Ipotești, județul Suceava" },
     services: ["Consultație andrologie", "Evaluare infertilitate masculină", "Ecografie scrotală"],
   },
+  {
+    name: "Dr. Alexandru-Daniel Dănilă",
+    slug: "dr-alexandru-daniel-danila-andrologie-targu-jiu",
+    kind: "DOCTOR",
+    description: "Medic specialist urologie din Târgu Jiu, care publică competențe în andrologie și infertilitate masculină.",
+    sourceUrl: "https://urologtargujiu.ro/",
+    photoUrl: "https://urologtargujiu.ro/wp-content/uploads/2023/03/dan_danila_1.jpg",
+    publish: true,
+    location: { city: "Târgu Jiu", address: "Strada Geneva 2, Târgu Jiu", phone: "+40770201020", email: "danila@urologtargujiu.ro" },
+    services: ["Consultație andrologie", "Evaluare infertilitate masculină", "Consultație urologie"],
+  },
 ];
