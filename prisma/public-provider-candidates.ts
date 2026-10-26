@@ -503,4 +503,14 @@ export const publicProviderCandidates: PublicProviderCandidate[] = [
     location: { city: "Slatina", address: "Strada Vintilă Vodă 21, Slatina", phone: "+40249433112" },
     services: ["Consultație andrologie", "Consultație sexologie", "Ecografie urogenitală"],
   },
+  {
+    name: "Dr. Dan Dumitrache",
+    slug: "dr-dan-dumitrache-andrologie-sfantu-gheorghe",
+    kind: "DOCTOR",
+    description: "Medic urolog la Pro-Vitam Sfântu Gheorghe, cu andrologia publicată între domeniile de interes.",
+    sourceUrl: "https://provitam.ro/doctor-category/oftalmologie/",
+    publish: true,
+    location: { city: "Sfântu Gheorghe", address: "Pro-Vitam, Strada Muncitorilor 16, Sfântu Gheorghe", phone: "+40267312919" },
+    services: ["Consultație andrologie", "Consultație urologie", "Endourologie"],
+  },
 ];
