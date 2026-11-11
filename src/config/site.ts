@@ -6,6 +6,7 @@ export const site = {
   indexable: process.env.SITE_INDEXABLE !== "false",
   specialty: "andrologie",
   specialistLabel: "Andrologi",
+  singularSpecialistLabel: "androlog",
   locale: "ro_RO",
   description: "Găsește medici și clinici de andrologie în orașul tău. Compară servicii și trimite o cerere de contact în siguranță.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://andrologi.ro",
